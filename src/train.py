@@ -26,7 +26,7 @@ def main():
     optimizer = optim.SGD(model.parameters(), lr=lr, momentum=0.9)
     
     # Create directory for saving models
-    os.makedirs('checkpoints', exist_ok=True)
+    # os.makedirs('checkpoints', exist_ok=True)
     
     # Training loop
     best_accuracy = 0.0
