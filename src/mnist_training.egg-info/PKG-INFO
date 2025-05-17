@@ -1,0 +1,10 @@
+Metadata-Version: 2.4
+Name: mnist-training
+Version: 0.1.0
+Summary: MNIST digit classification using PyTorch
+Requires-Python: >=3.8
+Requires-Dist: torch>=2.0.0
+Requires-Dist: torchvision>=0.15.0
+Requires-Dist: numpy>=1.21.0
+Requires-Dist: matplotlib>=3.4.0
+Requires-Dist: tqdm>=4.65.0

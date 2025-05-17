@@ -1,0 +1,16 @@
+README.md
+pyproject.toml
+src/__init__.py
+src/train.py
+src/utils.py
+src/augmentation/__init__.py
+src/augmentation/transforms.py
+src/data/__init__.py
+src/data/dataset.py
+src/mnist_training.egg-info/PKG-INFO
+src/mnist_training.egg-info/SOURCES.txt
+src/mnist_training.egg-info/dependency_links.txt
+src/mnist_training.egg-info/requires.txt
+src/mnist_training.egg-info/top_level.txt
+src/model/__init__.py
+src/model/mnist_model.py
