@@ -26,6 +26,7 @@ To train the model, run:
 ```bash
 cd src
 python train.py
-```
+``` 
+
 
 The model will be trained on the MNIST dataset with the specified augmentations. Checkpoints will be saved in the `checkpoints` directory.
