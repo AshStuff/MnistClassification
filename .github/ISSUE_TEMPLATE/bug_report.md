@@ -1,3 +1,11 @@
+---
+name: Bug Report
+about: Create a report to help us improve
+title: "[BUG] "
+labels: bug
+assignees: ''
+---
+
 ## System info
 Please enter your system information (OS, pip packages, gpu, etc.)
 
@@ -16,4 +24,4 @@ Please describe what actually happened
 If applicable, add screenshots to help explain the problem
 
 ## Additional Context
-Add any other context about the problem here
+Add any other context about the problem here 
