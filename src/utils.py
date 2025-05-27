@@ -31,7 +31,7 @@ def evaluate(model, device, data_loader, set_name="Test"):
             correct += pred.eq(target.view_as(pred)).sum().item()
 
     loss /= len(data_loader.dataset)
-    accuracy = 0.
+    accuracy = 100. * correct / len(data_loader.dataset)  # Calculate the accuracy
     
     print(f'\n{set_name} set: Average loss: {loss:.4f}, '
           f'Accuracy: {correct}/{len(data_loader.dataset)} '
