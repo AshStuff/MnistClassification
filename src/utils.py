@@ -1,6 +1,7 @@
 import torch
-import torch.nn.functional as F
 from tqdm import tqdm
+
+import torch.nn.functional as F
 
 
 def train_epoch(model, device, train_loader, optimizer, epoch):
