@@ -30,18 +30,29 @@ def main():
     
     # Training loop
     best_accuracy = 0.0
+    train_losses = []
+    
     for epoch in range(1, epochs + 1):
-        train_epoch(model, device, data_module.train_dataloader(), optimizer, epoch)
+        # Train and capture loss
+        avg_train_loss = train_epoch(model, device, data_module.train_dataloader(), optimizer, epoch)
+        train_losses.append(avg_train_loss)
         
         # Evaluate on validation set
-        evaluate(model, device, data_module.val_dataloader(), "Validation")
+        val_loss, val_accuracy = evaluate(model, device, data_module.val_dataloader(), "Validation")
+        
+        # Update best accuracy
+        if val_accuracy > best_accuracy:
+            best_accuracy = val_accuracy
+        
+        print(f"Epoch {epoch}: Train Loss = {avg_train_loss:.4f}, Val Loss = {val_loss:.4f}, Val Accuracy = {val_accuracy:.2f}%")
         
         # Save best model
         if epoch % 5 == 0:
             torch.save(model.state_dict(), f'checkpoints/mnist_model_epoch_{epoch}.pt')
     
     # Final evaluation on test set
-    evaluate(model, device, data_module.test_dataloader(), "Test")
+    test_loss, test_accuracy = evaluate(model, device, data_module.test_dataloader(), "Test")
+    print(f"Final Test Results: Loss = {test_loss:.4f}, Accuracy = {test_accuracy:.2f}%")
 
 if __name__ == '__main__':
     main() 

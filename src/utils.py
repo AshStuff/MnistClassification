@@ -5,6 +5,8 @@ from tqdm import tqdm
 def train_epoch(model, device, train_loader, optimizer, epoch):
     model.train()
     pbar = tqdm(train_loader, desc=f'Epoch {epoch}')
+    total_loss = 0
+    num_batches = 0
     
     for batch_idx, (data, target) in enumerate(pbar):
         data, target = data.to(device), target.to(device)
@@ -14,8 +16,14 @@ def train_epoch(model, device, train_loader, optimizer, epoch):
         loss.backward()
         optimizer.step()
         
+        total_loss += loss.item()
+        num_batches += 1
+        
         if batch_idx % 100 == 0:
             pbar.set_postfix({'Loss': loss.item()})
+    
+    avg_loss = total_loss / num_batches
+    return avg_loss
 
 def evaluate(model, device, data_loader, set_name="Test"):
     model.eval()
@@ -31,8 +39,10 @@ def evaluate(model, device, data_loader, set_name="Test"):
             correct += pred.eq(target.view_as(pred)).sum().item()
 
     loss /= len(data_loader.dataset)
-    accuracy = 0.
+    accuracy = 100. * correct / len(data_loader.dataset)
     
     print(f'\n{set_name} set: Average loss: {loss:.4f}, '
           f'Accuracy: {correct}/{len(data_loader.dataset)} '
           f'({accuracy:.2f}%)\n')
+    
+    return loss, accuracy
