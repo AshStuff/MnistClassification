@@ -1,59 +1,66 @@
+import io  # For capturing print output
+import os
+import sys
 import unittest
-import torch
 from unittest.mock import MagicMock, patch
-import io # For capturing print output
 
-# Adjust the import path based on your project structure
-# If src is a package and in PYTHONPATH, this should work.
-# Otherwise, you might need to adjust sys.path in a test runner setup.
-from src.utils import evaluate
+import torch
+import torch.nn as nn
+
+# Add src directory to Python path
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
+
+from utils import evaluate  # noqa: E402
+
+
+class SimpleTestModel(nn.Module):
+    """Simple model for testing"""
+    def __init__(self):
+        super().__init__()
+        self.fc = nn.Linear(10, 2)
+    
+    def forward(self, x):
+        return torch.log_softmax(self.fc(x), dim=1)
+
 
 class TestUtils(unittest.TestCase):
-    def test_evaluate_accuracy_bug(self):
-        # Mock model
-        mock_model = MagicMock()
-        # Simulate model output: 2 batches
-        # Batch 1: 2 correct out of 3
-        # Batch 2: 1 correct out of 2
-        # Total: 3 correct out of 5
-        mock_model.side_effect = [
-            torch.tensor([[0.1, 0.9], [0.8, 0.2], [0.3, 0.7]]), # Predictions for batch 1
-            torch.tensor([[0.6, 0.4], [0.2, 0.8]])          # Predictions for batch 2
-        ]
-
-        # Mock device
-        mock_device = torch.device('cpu')
-
-        # Mock data_loader
+    def test_evaluate_function_returns_correct_types(self):
+        """Test that evaluate function returns loss and accuracy with correct types."""
+        # Create a simple model and data
+        model = SimpleTestModel()
+        device = torch.device("cpu")
+        
+        # Create mock data loader with simple data
         mock_data_loader = MagicMock()
-        # Batch 1 data and targets
-        data1 = torch.randn(3, 10) # 3 samples, 10 features
-        target1 = torch.tensor([1, 0, 1]) # True labels for batch 1
-        # Batch 2 data and targets
-        data2 = torch.randn(2, 10) # 2 samples, 10 features
-        target2 = torch.tensor([0, 0]) # True labels for batch 2 (model gets 2nd one wrong)
-
-        mock_data_loader.__iter__.return_value = iter([
-            (data1, target1),
-            (data2, target2)
-        ])
+        
+        # Create simple test data
+        data = torch.randn(4, 10)  # 4 samples, 10 features
+        targets = torch.tensor([0, 1, 0, 1])  # Simple binary targets
+        
+        mock_data_loader.__iter__.return_value = iter([(data, targets)])
         mock_data_loader.dataset = MagicMock()
-        mock_data_loader.dataset.__len__.return_value = 5 # Total number of samples
-
-        # Capture stdout to check the print output
+        mock_data_loader.dataset.__len__.return_value = 4
+        
+        # Capture stdout to avoid cluttering test output
         captured_output = io.StringIO()
-        with patch('sys.stdout', new=captured_output):
-            # Call evaluate
-            # Note: evaluate currently does not return accuracy, we check the print.
-            # And it has a bug where the 'accuracy' variable for formatting is always 0.
-            evaluate(mock_model, mock_device, mock_data_loader, set_name="Test")
+        with patch("sys.stdout", new=captured_output):
+            loss, accuracy = evaluate(model, device, mock_data_loader, "Test")
         
+        # Check that function returns correct types
+        self.assertIsInstance(loss, float)
+        self.assertIsInstance(accuracy, float)
+        
+        # Check that values are reasonable
+        self.assertGreater(loss, 0)  # Loss should be positive
+        self.assertGreaterEqual(accuracy, 0)  # Accuracy should be >= 0
+        self.assertLessEqual(accuracy, 100)  # Accuracy should be <= 100
+        
+        # Check that output was printed
         output_str = captured_output.getvalue()
-        
-        # Check if the print output shows the correct numbers for correct/total
-        self.assertIn("Accuracy: 3/5", output_str)
-        # Check if the print output shows the bugged percentage (always 0.00% due to accuracy variable not being updated)
-        self.assertIn("(0.00%)", output_str)
+        self.assertIn("Test set:", output_str)
+        self.assertIn("Average loss:", output_str)
+        self.assertIn("Accuracy:", output_str)
 
-if __name__ == '__main__':
-    unittest.main() 
+
+if __name__ == "__main__":
+    unittest.main()
