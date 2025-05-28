@@ -11,7 +11,10 @@ import torch.optim as optim
 # Add src directory to Python path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from augmentation.transforms import get_train_transforms, get_val_transforms  # noqa: E402
+from augmentation.transforms import (
+    get_train_transforms,
+    get_val_transforms,
+)  # noqa: E402
 from data.dataset import MNISTDataModule  # noqa: E402
 from model.mnist_model import MNISTNet  # noqa: E402
 from utils import evaluate, train_epoch  # noqa: E402
