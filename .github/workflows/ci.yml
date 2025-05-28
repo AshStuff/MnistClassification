@@ -32,7 +32,8 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -e .[dev]
+        pip install torch torchvision numpy matplotlib tqdm
+        pip install black isort flake8 pytest pytest-cov
     
     - name: Run black formatting check
       run: |
@@ -71,26 +72,27 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -e .[dev]
+        pip install torch torchvision numpy matplotlib tqdm
+        pip install black isort flake8 pytest pytest-cov
     
     - name: Run test_train.py
       run: |
-        python tests/test_train.py
+        PYTHONPATH=src python tests/test_train.py
     
     - name: Run test_utils.py
       run: |
-        python tests/test_utils.py
+        PYTHONPATH=src python tests/test_utils.py
     
     - name: Run test_transforms.py
       run: |
-        python tests/test_transforms.py
+        PYTHONPATH=src python tests/test_transforms.py
     
     - name: Run all tests with pytest
       run: |
-        pytest tests/ -v --tb=short
+        PYTHONPATH=src pytest tests/ -v --tb=short
     
     - name: Upload test results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: test-results-${{ matrix.python-version }}

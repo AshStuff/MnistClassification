@@ -23,11 +23,6 @@ commands:
             pip install --upgrade pip
             pip install torch torchvision numpy matplotlib tqdm
             pip install flake8 black isort pytest pytest-cov
-      - run:
-          name: Install project in development mode
-          command: |
-            source .venv/bin/activate
-            pip install -e .
 
 # Define jobs
 jobs:
@@ -66,22 +61,22 @@ jobs:
           name: Run test_train.py
           command: |
             source .venv/bin/activate
-            python tests/test_train.py
+            PYTHONPATH=src python tests/test_train.py
       - run:
           name: Run test_utils.py
           command: |
             source .venv/bin/activate
-            python tests/test_utils.py
+            PYTHONPATH=src python tests/test_utils.py
       - run:
           name: Run test_transforms.py
           command: |
             source .venv/bin/activate
-            python tests/test_transforms.py
+            PYTHONPATH=src python tests/test_transforms.py
       - run:
           name: Run all tests with pytest
           command: |
             source .venv/bin/activate
-            pytest tests/ -v --tb=short
+            PYTHONPATH=src pytest tests/ -v --tb=short
       - store_test_results:
           path: test-results
       - store_artifacts:
