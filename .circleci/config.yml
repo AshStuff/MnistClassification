@@ -52,8 +52,11 @@ jobs:
     docker:
       - image: cimg/python:3.9
     working_directory: ~/mnist-training
-    steps:
+    steps: 
       - setup_python_env
+      - run:
+          name: Create logs directory
+          command: mkdir -p logs
       - run:
           name: Create test data directory
           command: mkdir -p test_data
@@ -61,27 +64,30 @@ jobs:
           name: Run test_train.py
           command: |
             source .venv/bin/activate
-            PYTHONPATH=src python tests/test_train.py
+            PYTHONPATH=src python tests/test_train.py > logs/test_train.log 2>&1
       - run:
           name: Run test_utils.py
           command: |
             source .venv/bin/activate
-            PYTHONPATH=src python tests/test_utils.py
+            PYTHONPATH=src python tests/test_utils.py > logs/test_utils.log 2>&1
       - run:
           name: Run test_transforms.py
           command: |
             source .venv/bin/activate
-            PYTHONPATH=src python tests/test_transforms.py
+            PYTHONPATH=src python tests/test_transforms.py > logs/test_transforms.log 2>&1
       - run:
           name: Run all tests with pytest
           command: |
             source .venv/bin/activate
-            PYTHONPATH=src pytest tests/ -v --tb=short
+            PYTHONPATH=src pytest tests/ -v --tb=short > logs/pytest.log 2>&1
       - store_test_results:
           path: test-results
-      - store_artifacts:
+      - store_artifacts: 
           path: test-results
           destination: test-results
+      - store_artifacts:
+          path: logs
+          destination: logs
 
 # Define workflows
 workflows:
@@ -90,7 +96,7 @@ workflows:
     jobs:
       - lint
       - test
-
+   
   # Optional: Nightly full test (can be enabled if needed)
   # nightly:
   #   triggers:
