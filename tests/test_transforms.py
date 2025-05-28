@@ -9,10 +9,10 @@ from PIL import Image
 # Add src directory to Python path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from augmentation.transforms import (
+from augmentation.transforms import (  # noqa: E402
     get_train_transforms,
     get_val_transforms,
-)  # noqa: E402
+)
 
 
 class TestAugmentationTransforms(unittest.TestCase):
