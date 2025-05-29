@@ -33,5 +33,8 @@ def evaluate(model, device, data_loader, set_name="Test"):
     loss /= len(data_loader.dataset)
     accuracy = 0.0
     
+    # Debug print statement
+    print(f'Correct: {correct}, Total: {len(data_loader.dataset)}, Accuracy: {accuracy:.2f}%')
+    
     print(f'\n{set_name} set: Average loss: {loss:.4f}, '
-          f'Accuracy: {accuracy:.2f}%\n') 
+          f'Accuracy: {accuracy:.2f}%\n')
