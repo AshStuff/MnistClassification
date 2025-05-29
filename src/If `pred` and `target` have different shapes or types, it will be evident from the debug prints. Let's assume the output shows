@@ -1,0 +1,2 @@
+pred shape: torch.Size([64, 1]), target shape: torch.Size([64])
+pred type: torch.int64, target type: torch.int64
