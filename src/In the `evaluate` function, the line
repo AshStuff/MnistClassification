@@ -1,0 +1,1 @@
+correct += pred.eq(target.view_as(pred)).sum().item()

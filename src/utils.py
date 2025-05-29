@@ -35,4 +35,4 @@ def evaluate(model, device, data_loader, set_name="Test"):
     
     print(f'\n{set_name} set: Average loss: {loss:.4f}, '
           f'Accuracy: {correct}/{len(data_loader.dataset)} '
-          f'({accuracy:.2f}%)\n') 
+          f'({accuracy:.2f}%)\n')
