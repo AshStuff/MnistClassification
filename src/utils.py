@@ -33,6 +33,10 @@ def evaluate(model, device, data_loader, set_name="Test"):
     loss /= len(data_loader.dataset)
     accuracy = 100. * correct / len(data_loader.dataset)
     
+    # Debug prints
+    print(f'Sample Predictions: {pred[:10].squeeze()}')
+    print(f'Sample Targets: {target[:10]}')
+    
     print(f'\n{set_name} set: Average loss: {loss:.4f}, '
           f'Accuracy: {correct}/{len(data_loader.dataset)} '
           f'({accuracy:.2f}%)\n') 
