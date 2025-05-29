@@ -28,6 +28,11 @@ def evaluate(model, device, data_loader, set_name="Test"):
             output = model(data)
             loss += F.nll_loss(output, target, reduction='sum').item()
             pred = output.argmax(dim=1, keepdim=True)
+            
+            # Debug prints
+            print(f"Data shape: {data.shape}, Target shape: {target.shape}, Pred shape: {pred.shape}")
+            print(f"Target: {target[:10]}, Pred: {pred[:10].squeeze()}")
+            
             correct += pred.eq(target.view_as(pred)).sum().item()
 
     loss /= len(data_loader.dataset)
@@ -35,4 +40,4 @@ def evaluate(model, device, data_loader, set_name="Test"):
     
     print(f'\n{set_name} set: Average loss: {loss:.4f}, '
           f'Accuracy: {correct}/{len(data_loader.dataset)} '
-          f'({accuracy:.2f}%)\n') 
+          f'({accuracy:.2f}%)\n')
