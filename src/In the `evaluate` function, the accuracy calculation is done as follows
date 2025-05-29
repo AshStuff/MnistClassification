@@ -1,0 +1,1 @@
+accuracy = correct / len(data_loader.dataset) * 100
