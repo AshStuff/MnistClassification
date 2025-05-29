@@ -34,4 +34,8 @@ def evaluate(model, device, data_loader, set_name="Test"):
     accuracy = 0.0
     
     print(f'\n{set_name} set: Average loss: {loss:.4f}, '
-          f'Accuracy: {accuracy:.2f}%\n') 
+          f'Accuracy: {accuracy:.2f}%\n')
+    
+    # Debugging statements
+    print(f'Number of correct predictions: {correct}')
+    print(f'Total number of samples: {len(data_loader.dataset)}')
